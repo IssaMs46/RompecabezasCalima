@@ -5,11 +5,14 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(CanvasGroup))]
 public class DragPiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-   [Header("Referencia a la pieza fija (posición correcta)")]
+    [Header("Referencia a la pieza fija (posición correcta)")]
     [SerializeField] RectTransform referencePiece;
 
     [Header("Margen de error en píxeles")]
     [SerializeField] float snapDistance = 35f;
+
+    [Header("Puzzle Manager")]
+    [SerializeField] PuzzleManager puzzleManager;  // 👈 Arrástralo en el inspector
 
     RectTransform rect;        // RectTransform de ESTA pieza interactiva
     RectTransform parentRect;  // Padre común
@@ -85,7 +88,13 @@ public class DragPiece : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         cg.interactable   = false;
         cg.blocksRaycasts = false;
 
-        // Si quieres, desactiva el script
+        // ✅ Avisar al PuzzleManager que esta pieza ya está completada
+        if (puzzleManager != null)
+        {
+            puzzleManager.PiezaCompletada();
+        }
+
+        // Si quieres, desactiva el script:
         // enabled = false;
     }
 }
